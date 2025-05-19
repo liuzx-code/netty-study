@@ -16,6 +16,8 @@ public class Client {
         System.out.println("waiting ......");
 
         sc.write(Charset.defaultCharset().encode("0123456789abcdef123456789\n"));
+
+        System.out.println("waited ......");
         // 3、发送数据
 //        sc.write(java.nio.ByteBuffer.wrap(new String("hello").getBytes()));
 
