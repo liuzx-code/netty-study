@@ -1,4 +1,4 @@
-package com.liuzx.netty.c3_filespaths;
+package com.liuzx.nio.c3_filespaths;
 
 import java.io.IOException;
 import java.nio.file.Files;

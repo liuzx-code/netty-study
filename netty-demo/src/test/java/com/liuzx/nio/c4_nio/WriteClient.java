@@ -1,4 +1,4 @@
-package com.liuzx.netty.c4_nio;
+package com.liuzx.nio.c4_nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

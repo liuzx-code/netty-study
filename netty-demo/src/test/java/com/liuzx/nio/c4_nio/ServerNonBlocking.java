@@ -1,4 +1,4 @@
-package com.liuzx.netty.c4_nio;
+package com.liuzx.nio.c4_nio;
 
 import lombok.extern.slf4j.Slf4j;
 

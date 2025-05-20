@@ -1,4 +1,4 @@
-package com.liuzx.netty.c2;
+package com.liuzx.nio.c2;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
