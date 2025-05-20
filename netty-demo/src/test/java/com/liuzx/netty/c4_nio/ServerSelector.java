@@ -12,6 +12,11 @@ import java.util.Iterator;
 import static com.liuzx.netty.c1.ByteBufferUtil.debugAll;
 import static com.liuzx.netty.c1.ByteBufferUtil.debugRead;
 
+/**
+ * 传统阻塞IO是干等着，NIO是注册了关心的事件，有事件了才去处理
+ * NIO使用select调用监听事件，当事件发生时开始进行处理，此时连接可以直接建立，数据也已经准备就绪，处理事件时，可以一次性处理多个事件，并且不需要等待，直接进行处理。
+ * 多路复用，并不是一次处理多个事件，而是在秉着一种有事了再找我，你准备好了，再触发事件
+ */
 @Slf4j
 public class ServerSelector {
 
