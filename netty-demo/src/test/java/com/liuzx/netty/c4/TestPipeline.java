@@ -5,8 +5,17 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 21:06:10 [DEBUG] [nioEventLoopGroup-2-2] c.l.n.c.TestPipeline - 1
+ * 21:06:10 [DEBUG] [nioEventLoopGroup-2-2] c.l.n.c.TestPipeline - 2
+ * 21:06:10 [DEBUG] [nioEventLoopGroup-2-2] c.l.n.c.TestPipeline - 3
+ * 21:06:10 [DEBUG] [nioEventLoopGroup-2-2] c.l.n.c.TestPipeline - 6
+ * 21:06:10 [DEBUG] [nioEventLoopGroup-2-2] c.l.n.c.TestPipeline - 5
+ * 21:06:10 [DEBUG] [nioEventLoopGroup-2-2] c.l.n.c.TestPipeline - 4
+ */
 @Slf4j
 public class TestPipeline {
     public static void main(String[] args) {
@@ -19,7 +28,9 @@ public class TestPipeline {
                         //  1.通过 channel 拿到 pipeline
                         ChannelPipeline pipeline = ch.pipeline();
                         // 2.添加处理器 head -> h1 -> h2 -> h3 -> h4 -> h5 -> h6 -> tail
-                        pipeline.addLast("h1",new ChannelInboundHandlerAdapter(){
+                        // 添加 StringDecoder 来解析客户端发来的字符串
+//                        pipeline.addLast(new StringDecoder());
+                        pipeline.addLast("h1", new ChannelInboundHandlerAdapter() {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                 log.debug("1");
@@ -27,7 +38,7 @@ public class TestPipeline {
                             }
                         });
 
-                        pipeline.addLast("h2",new ChannelInboundHandlerAdapter(){
+                        pipeline.addLast("h2", new ChannelInboundHandlerAdapter() {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                 log.debug("2");
@@ -35,16 +46,16 @@ public class TestPipeline {
                             }
                         });
 
-                        pipeline.addLast("h3",new ChannelInboundHandlerAdapter(){
+                        pipeline.addLast("h3", new ChannelInboundHandlerAdapter() {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                 log.debug("3");
                                 super.channelRead(ctx, msg);
-                                ctx.writeAndFlush(ctx.alloc().buffer().writeBytes("hahaha".getBytes()));
+                                ch.writeAndFlush(ctx.alloc().buffer().writeBytes("hahaha".getBytes()));
                             }
                         });
 
-                        pipeline.addLast("h4",new ChannelOutboundHandlerAdapter(){
+                        pipeline.addLast("h4", new ChannelOutboundHandlerAdapter() {
                             @Override
                             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                                 log.debug("4");
@@ -52,7 +63,7 @@ public class TestPipeline {
                             }
                         });
 
-                        pipeline.addLast("h5",new ChannelOutboundHandlerAdapter(){
+                        pipeline.addLast("h5", new ChannelOutboundHandlerAdapter() {
                             @Override
                             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                                 log.debug("5");
@@ -60,7 +71,7 @@ public class TestPipeline {
                             }
                         });
 
-                        pipeline.addLast("h4",new ChannelOutboundHandlerAdapter(){
+                        pipeline.addLast("h6", new ChannelOutboundHandlerAdapter() {
                             @Override
                             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                                 log.debug("6");
