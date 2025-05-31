@@ -1,4 +1,4 @@
-package com.liuzx.netty.c5;
+package com.liuzx.netty.c5.a_stickyandhalf_bag;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -11,10 +11,18 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Slf4j
 public class HelloWorldClient {
 
     public static void main(String[] args) {
+        for (int i = 0; i < 10; i++) {
+            send();
+        }
+       log.debug("main over");
+    }
+
+    private static void send() {
         NioEventLoopGroup worker = new NioEventLoopGroup();
         try {
             Bootstrap bootstrap = new Bootstrap();

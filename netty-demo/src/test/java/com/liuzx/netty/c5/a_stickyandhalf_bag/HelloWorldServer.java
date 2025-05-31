@@ -1,4 +1,4 @@
-package com.liuzx.netty.c5;
+package com.liuzx.netty.c5.a_stickyandhalf_bag;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -9,6 +9,11 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ *  黏包现象 ： 不调 服务端 接收缓冲区 SO_RCVBUF
+ *  半包现象 ： serverBootstrap.option(ChannelOption.SO_RCVBUF, 10);
+ *            影响的底层接收缓冲区（即滑动窗口）大小，仅决定了 netty 读取的最小单位，netty 实际每次读取的一般是它的整数倍
+ */
 @Slf4j
 public class HelloWorldServer {
     public static void main(String[] args) {
@@ -16,6 +21,7 @@ public class HelloWorldServer {
         NioEventLoopGroup worker = new NioEventLoopGroup();
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap()
+                      // 调整系统的接收缓冲器(滑动窗口)
                     .option(ChannelOption.SO_RCVBUF, 10)// 服务器接收缓存区调小一点，模拟半包现象
                     .group(boss, worker)
                     .channel(NioServerSocketChannel.class)
