@@ -1,4 +1,4 @@
-package com.liuzx.netty.c5.e_stickyandhalf_bag;
+package com.liuzx.netty.c5.a_stickyandhalf_bag_5;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;

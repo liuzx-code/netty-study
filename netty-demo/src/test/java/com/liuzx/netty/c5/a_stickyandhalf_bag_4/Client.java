@@ -1,4 +1,4 @@
-package com.liuzx.netty.c5.d_stickyandhalf_bag;
+package com.liuzx.netty.c5.a_stickyandhalf_bag_4;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
