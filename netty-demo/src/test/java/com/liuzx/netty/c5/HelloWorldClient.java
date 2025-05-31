@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class HelloWorldClient {
+
     public static void main(String[] args) {
         NioEventLoopGroup worker = new NioEventLoopGroup();
         try {
