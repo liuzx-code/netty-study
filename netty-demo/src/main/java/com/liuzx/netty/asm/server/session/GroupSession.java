@@ -54,4 +54,27 @@ public interface GroupSession {
      * @return 成员 channel 集合
      */
     List<Channel> getMembersChannel(String name);
+
+    /**
+     * 获取组成员的 channel 集合, 只有在线的 channel 才会返回
+     * @param name 组名
+     * @param fromUsername 发送者(过滤掉自己)
+     * @return 成员 channel 集合
+     */
+    List<Channel> getMembersChannel(String name, String fromUsername);
+
+    /**
+     * 根据群聊名称判断群聊是否存在
+     * @param name 组名
+     * @return 存在 true, 不存在 false
+     */
+    boolean isGroupExist(String name);
+
+    /**
+     * 用户退出群聊
+     * @param name 组名
+     * @param username 退出用户
+     * @return 成功 true
+     */
+    boolean quitGroup(String name, String username);
 }

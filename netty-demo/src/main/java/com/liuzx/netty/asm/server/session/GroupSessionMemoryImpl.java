@@ -44,12 +44,42 @@ public class GroupSessionMemoryImpl implements GroupSession {
         return groupMap.getOrDefault(name, Group.EMPTY_GROUP).getMembers();
     }
 
-    // 根据 【群聊名称】 -> 【用户名Set】 -> map遍历 -> 【用户名获取到 所有对应的 channel】 -> 【channel List】
     @Override
     public List<Channel> getMembersChannel(String name) {
         return getMembers(name).stream()
+                .map(member -> SessionFactory.getSession().getChannel(member))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    // 根据 【群聊名称】 -> 【用户名Set】 -> map遍历 -> 【用户名获取到 所有对应的 channel】 -> 【channel List】
+    @Override
+    public List<Channel> getMembersChannel(String name, String fromUsername) {
+        return getMembers(name).stream()
+                // 过滤发送人
+                .filter(member -> !fromUsername.equals(member))
                 .map(member -> SessionFactory.getSession().getChannel(member)) // 根据成员名 获得Channel
                 .filter(Objects::nonNull)                                      // 不是 null 才会 被下面收集
                 .collect(Collectors.toList());
+    }
+
+
+
+    @Override
+    public boolean isGroupExist(String name) {
+        return !groupMap.containsKey(name);
+    }
+
+    @Override
+    public boolean quitGroup(String name, String username) {
+        // 为空则删除失败
+        return null != groupMap.computeIfPresent(name, (key, oldValue) -> {
+            Set<String> members = oldValue.getMembers().stream()
+                    // 过滤退出用户
+                    .filter(member -> !username.equals(member))
+                    .collect(Collectors.toSet());
+            oldValue.setMembers(members);
+            return oldValue;
+        });
     }
 }

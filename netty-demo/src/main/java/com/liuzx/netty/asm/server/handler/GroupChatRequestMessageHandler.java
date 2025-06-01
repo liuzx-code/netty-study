@@ -2,7 +2,6 @@ package com.liuzx.netty.asm.server.handler;
 
 import com.liuzx.netty.asm.message.GroupChatRequestMessage;
 import com.liuzx.netty.asm.message.GroupChatResponseMessage;
-import com.liuzx.netty.asm.server.session.GroupSession;
 import com.liuzx.netty.asm.server.session.GroupSessionFactory;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -18,15 +17,16 @@ import java.util.List;
 public class GroupChatRequestMessageHandler extends SimpleChannelInboundHandler<GroupChatRequestMessage> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, GroupChatRequestMessage msg) throws Exception {
-
-        final GroupSession groupSession = GroupSessionFactory.getGroupSession();
-        final List<Channel> channelList = groupSession.getMembersChannel(msg.getGroupName());
-
-        for (Channel  channel : channelList){
-
-            channel.writeAndFlush(new GroupChatResponseMessage(msg.getFrom(),msg.getContent()));
-
+        // 判断群聊是否存在
+        if (GroupSessionFactory.getGroupSession().isGroupExist(msg.getGroupName())) {
+            ctx.writeAndFlush(new GroupChatResponseMessage(false, "群聊[" + msg.getGroupName() + "]不存在"));
+            return;
         }
+        // 获取群聊中在线成员, 不包括发送人
+        List<Channel> channels = GroupSessionFactory.getGroupSession()
+                .getMembersChannel(msg.getGroupName(), msg.getFrom());
+        channels.forEach(channel ->
+                channel.writeAndFlush(new GroupChatResponseMessage(msg.getGroupName() + "." + msg.getFrom(), msg.getContent())));
 
     }
 

@@ -20,7 +20,7 @@ import java.util.Set;
 public class GroupCreateRequestMessageHandler extends SimpleChannelInboundHandler<GroupCreateRequestMessage> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, GroupCreateRequestMessage msg) throws Exception {
-
+        // 群名
         final String groupName = msg.getGroupName();
         final Set<String> members = msg.getMembers();
         // 群管理器
@@ -40,7 +40,6 @@ public class GroupCreateRequestMessageHandler extends SimpleChannelInboundHandle
         }
         // 创建失败
         else{
-
             ctx.writeAndFlush(new GroupCreateResponseMessage(false, "已存在群: " + groupName));
         }
 

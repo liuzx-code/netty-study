@@ -7,6 +7,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ChatResponseMessage extends AbstractResponseMessage {
 
+    /**
+     * 发送者
+     */
     private String from;
     private String content;
 

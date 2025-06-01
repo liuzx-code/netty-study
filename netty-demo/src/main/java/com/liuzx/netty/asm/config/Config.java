@@ -5,7 +5,10 @@ import com.liuzx.netty.asm.protocol.MySerializer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+
 
 /**
  * 使用配置文件 获取 编解码方法
@@ -48,6 +51,15 @@ public abstract class Config {
             return MySerializer.Algorithm.valueOf(value);
         }
 
+    }
+
+    /** 获取服务层映射 **/
+    public static Map<String, String> getServiceProperties() {
+        HashMap<String, String> map = new HashMap<>(2);
+        properties.stringPropertyNames()
+                .stream().filter(name -> name.endsWith("Service"))
+                .forEach(name -> map.put(name, properties.getProperty(name)));
+        return map;
     }
 
 
