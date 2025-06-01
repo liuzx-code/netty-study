@@ -100,7 +100,9 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, Message
         // 1. 找到反序列化算法
         final MySerializer.Algorithm algorithm = MySerializer.Algorithm.values()[serializerType];
         // 2. 找到消息具体类型
-        final Object message = algorithm.deserializer(Message.getMessageClass(messageType), bytes);
+        // 确定具体的消息类型
+        Class<?> messageClass = Message.getMessageClass(messageType);
+        final Object message = algorithm.deserializer(messageClass, bytes);
 
 // <<<<<<<<<<<<<<<<<<<<
 
