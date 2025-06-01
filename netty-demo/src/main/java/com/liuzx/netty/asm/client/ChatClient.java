@@ -12,8 +12,9 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class ChatClient {
@@ -24,6 +25,12 @@ public class ChatClient {
 
         MessageCodecSharable MESSAGE_CODEC = new MessageCodecSharable();
         LoggingHandler LOGGING_HANDLER = new LoggingHandler(LogLevel.DEBUG);
+
+        // 倒计时锁，【主次线程之间 通信】， 初始基数1，减为零才继续往下运行，否则等待
+        CountDownLatch WAIT_FOR_LOGIN = new CountDownLatch(1);
+
+        // 登录状态 初始值 false 【主次线程之间 共享变量】
+        AtomicBoolean LOGIN = new AtomicBoolean(false);
 
         try {
             Bootstrap bs = new Bootstrap();
@@ -46,6 +53,13 @@ public class ChatClient {
                         @Override
                         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception { // 客户端接收消息
                                 log.debug("msg: {}", msg);
+                            // 1. 处理登录 [登录成功 登录状态=true]
+                            if ((msg instanceof LoginResponseMessage)) {
+                                LoginResponseMessage responseMessage = (LoginResponseMessage) msg;
+                                if(responseMessage.isSuccess()) LOGIN.set(true);
+                                // 减一 唤醒 线程：system in
+                                WAIT_FOR_LOGIN.countDown();
+                            }
                         }
                         // ###################### [ 1 ] ######################
                         @Override // 【 连接建立后触发一次 】
@@ -66,10 +80,34 @@ public class ChatClient {
                                 log.debug("等待后续操作......");
                                 // 为了让代码不马上结束
                                 try {
-                                    System.in.read();
-                                } catch (IOException e) {
+                                    // 执行完countDown会继续向下运行
+                                    WAIT_FOR_LOGIN.await();
+                                } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
+
+                                // ###################### [ 4 ] ######################
+                                // 登录失败 停止运行
+                                if (!LOGIN.get()) {
+                                    // 触发 【channel.closeFuture().sync(); 向下运行】
+                                    ctx.channel().close();
+                                    return;
+                                }
+
+                                // 打印菜单
+                                while (true)
+                                {
+                                    System.out.println("============ 功能菜单 ============");
+                                    System.out.println("send [username] [content]");
+                                    System.out.println("gsend [group name] [content]");
+                                    System.out.println("gcreate [group name] [m1,m2,m3...]");
+                                    System.out.println("gmembers [group name]");
+                                    System.out.println("gjoin [group name]");
+                                    System.out.println("gquit [group name]");
+                                    System.out.println("quit");
+                                    System.out.println("==================================");
+                                }
+
                             },"system in").start();
                         }
                     });
