@@ -41,7 +41,7 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
     public void encode(ChannelHandlerContext ctx, Message msg, ByteBuf out) throws Exception {
         // 1、4字节的 魔数 用来在第一时间判定是否是无效数据包
         out.writeBytes(new byte[]{1, 2, 3, 4});
-        // 2、字节的 版本，可以支持协议的升级
+        // 2、1字节的 版本，可以支持协议的升级
         out.writeByte(1);
         // 3、1字节的 序列化方式 0-jdk,1-json 消息正文到底采用哪种序列化反序列化方式
         out.writeByte(0);
