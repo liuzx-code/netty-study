@@ -10,7 +10,7 @@ import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-public class TestAlgorithm {
+public class TestSerializer {
 
     public static void main(String[] args) {
 
