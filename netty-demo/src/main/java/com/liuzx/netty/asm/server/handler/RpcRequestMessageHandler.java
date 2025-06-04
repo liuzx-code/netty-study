@@ -14,19 +14,29 @@ import java.lang.reflect.Method;
 @Slf4j
 @ChannelHandler.Sharable
 public class RpcRequestMessageHandler extends AbstractRequestMessageHandler<RpcRequestMessage> {
+
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, RpcRequestMessage msg) throws Exception {
-        RpcResponseMessage responseMessage = new RpcResponseMessage();
-        responseMessage.setSequenceId(msg.getSequenceId());
+    protected void channelRead0(ChannelHandlerContext ctx, RpcRequestMessage message) {
+        RpcResponseMessage response = new RpcResponseMessage();
+        response.setSequenceId(message.getSequenceId());
         try {
-            Class<?> aClass = Class.forName(msg.getInterfaceName());
-            HelloService service = (HelloService) ServicesFactory.getService(aClass);
-            Method method = aClass.getMethod(msg.getMethodName(), msg.getParameterTypes());
-            Object re = method.invoke(service, msg.getParameterValue());
-            responseMessage.setReturnValue(re);
+            // 获取真正的实现对象
+            HelloService service = (HelloService)
+                    ServicesFactory.getService(Class.forName(message.getInterfaceName()));
+
+            // 获取要调用的方法
+            Method method = service.getClass().getMethod(message.getMethodName(), message.getParameterTypes());
+
+            // 反射调用方法
+            Object invoke = method.invoke(service, message.getParameterValue());
+            // 调用成功
+            response.setReturnValue(invoke);
         } catch (Exception e) {
-            responseMessage.setExceptionValue(new Exception("远程调用失败" + e.getCause().getMessage()));
+            e.printStackTrace();
+            // 调用异常
+            response.setExceptionValue(e);
         }
-        ctx.writeAndFlush(responseMessage);
+        // 返回结果
+        ctx.writeAndFlush(response);
     }
 }
