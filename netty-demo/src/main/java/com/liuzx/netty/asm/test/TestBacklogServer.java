@@ -34,6 +34,13 @@ import io.netty.handler.logging.LoggingHandler;
 5.  找到 private volatile int backlog = NetUtil.SOMAXCONN;
 6.  最后发现 NetUtil 里 253行定义了默认数据
 
+
+
+ netty 可以通过设置启动参数
+ - 设置非池化: -Dio.netty.allocator.type=unpooled
+ - 设置直接内存：-Dio.netty.noPreferDirect=true(不首先直接内存)
+
+
  */
 public class TestBacklogServer {
 
