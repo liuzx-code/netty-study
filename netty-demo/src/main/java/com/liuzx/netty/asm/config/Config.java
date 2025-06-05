@@ -42,7 +42,7 @@ public abstract class Config {
 
     public static MySerializer.Algorithm getMySerializerAlgorithm(){
 
-        final String value = properties.getProperty("mySerializer.algorithm");
+        final String value = properties.getProperty("serialize.algorithm");
         if(value == null)
         {
             return MySerializer.Algorithm.Java;

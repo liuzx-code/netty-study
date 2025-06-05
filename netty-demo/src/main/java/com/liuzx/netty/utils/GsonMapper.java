@@ -1,4 +1,4 @@
-package com.liuzx.netty.asm.utils;
+package com.liuzx.netty.utils;
 
 import com.google.gson.*;
 

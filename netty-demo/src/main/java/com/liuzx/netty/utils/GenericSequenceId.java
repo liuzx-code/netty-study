@@ -1,4 +1,4 @@
-package com.liuzx.netty.asm.utils;
+package com.liuzx.netty.utils;
 
 import java.util.concurrent.atomic.LongAdder;
 

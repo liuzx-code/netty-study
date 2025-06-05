@@ -1,8 +1,8 @@
-package com.liuzx.netty.asm.server;
+package com.liuzx.netty.rpc.server;
 
 import com.liuzx.netty.asm.protocol.MessageCodecSharable;
 import com.liuzx.netty.asm.protocol.ProcotolFrameDecoder;
-import com.liuzx.netty.asm.server.handler.RpcRequestMessageHandler;
+import com.liuzx.netty.rpc.server.handler.RpcRequestMessageHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RpcServer {
     public static void main(String[] args) {
-        NioEventLoopGroup boss = new NioEventLoopGroup();
+        NioEventLoopGroup boss = new NioEventLoopGroup(1);
         NioEventLoopGroup worker = new NioEventLoopGroup();
         LoggingHandler LOGGING_HANDLER = new LoggingHandler(LogLevel.DEBUG);
         MessageCodecSharable MESSAGE_CODEC = new MessageCodecSharable();

@@ -1,4 +1,4 @@
-package com.liuzx.netty.asm.protocol;
+package com.liuzx.netty.rpc.protocol;
 
 
 import com.liuzx.netty.utils.GsonMapper;
@@ -66,5 +66,4 @@ public interface Serializable {
             }
         }
     }
-
 }

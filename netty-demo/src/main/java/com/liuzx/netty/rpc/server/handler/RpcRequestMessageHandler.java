@@ -1,9 +1,10 @@
-package com.liuzx.netty.asm.server.handler;
+package com.liuzx.netty.rpc.server.handler;
 
-import com.liuzx.netty.asm.message.RpcRequestMessage;
-import com.liuzx.netty.asm.message.RpcResponseMessage;
+import com.liuzx.netty.asm.server.handler.AbstractRequestMessageHandler;
 import com.liuzx.netty.asm.service.HelloService;
 import com.liuzx.netty.asm.service.ServicesFactory;
+import com.liuzx.netty.rpc.message.RpcRequestMessage;
+import com.liuzx.netty.rpc.message.RpcResponseMessage;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;

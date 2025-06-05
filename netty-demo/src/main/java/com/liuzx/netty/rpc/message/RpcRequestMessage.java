@@ -1,12 +1,10 @@
-package com.liuzx.netty.asm.message;
+package com.liuzx.netty.rpc.message;
 
+import com.liuzx.netty.asm.message.Message;
 import lombok.Getter;
 import lombok.ToString;
 
-/**
- * @author ZhuHJay
- * @date 2023/3/10 17:12
- */
+
 @Getter
 @ToString(callSuper = true)
 public class RpcRequestMessage extends Message {
