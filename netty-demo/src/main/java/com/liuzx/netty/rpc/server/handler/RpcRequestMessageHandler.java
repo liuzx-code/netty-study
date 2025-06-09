@@ -35,7 +35,10 @@ public class RpcRequestMessageHandler extends AbstractRequestMessageHandler<RpcR
         } catch (Exception e) {
             e.printStackTrace();
             // 调用异常
-            response.setExceptionValue(e);
+            // 不建议这么写，会把异常的堆栈信息返回给客户端 太多了
+//            response.setExceptionValue(e);
+            String msg = e.getCause().getMessage();
+            response.setExceptionValue(new Exception("远程调用出错：" + msg));
         }
         // 返回结果
         ctx.writeAndFlush(response);
