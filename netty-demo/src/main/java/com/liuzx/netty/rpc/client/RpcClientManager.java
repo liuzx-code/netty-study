@@ -31,7 +31,8 @@ public class RpcClientManager {
             return channel;
         }
         synchronized (LOCK) {
-            if (channel != null) { // 双重检查 防止唤醒时候创建多个 channel
+            // 双重检查 防止唤醒时候创建多个 channel
+            if (channel != null) {
                 return channel;
             }
             initChannel();
